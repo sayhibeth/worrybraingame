@@ -76,7 +76,7 @@
     pointer-events:none;
   }
 
-  /* ✅ BIGGER DRAWN CARD OVERLAY + BIGGER TEXT + GENTLER TRANSITION */
+  /* ✅ BIGGER FONT + LESS LINE SPACING */
   #cardDisplay {
     position:absolute;
     width: 500px;
@@ -93,22 +93,22 @@
     justify-content:center;
     text-align:center;
 
-    font-size:32px;        /* ✅ larger */
+    font-size:34px;     /* ✅ slightly bigger */
     font-weight:600;
-    line-height:1.55;
+    line-height:1.28;   /* ✅ much tighter */
 
     overflow-y:auto;
     z-index:10;
 
     opacity:0;
     transform: translateY(24px) scale(0.98);
-    transition: opacity 480ms ease, transform 480ms ease;  /* ✅ slower + gentle */
+    transition: opacity 480ms ease, transform 480ms ease;
   }
   #cardDisplay.show {
     opacity:1;
     transform: translateY(0) scale(1);
   }
-  #cardDisplay.long { font-size:26px; }  /* still large for long cards */
+  #cardDisplay.long { font-size:28px; line-height:1.28; } /* ✅ bigger + tight for long cards */
 
   #cardDisplay.active-card {
     border:2px solid rgba(0,0,0,0.16);
@@ -126,7 +126,7 @@
 
   /* BUTTONS */
   #scoringButtons {
-    margin-top: 150px; /* down */
+    margin-top: 150px;
     text-align:center;
   }
   .score-btn {
@@ -212,9 +212,10 @@
       height: 430px;
       left: -75px;
       top: -45px;
-      font-size:28px;
+      font-size:30px;
+      line-height:1.28;
     }
-    #cardDisplay.long { font-size:23px; }
+    #cardDisplay.long { font-size:25px; line-height:1.28; }
     #scoringButtons { margin-top: 130px; }
   }
 </style>
@@ -273,13 +274,9 @@
 </div>
 
 <script>
-/* ============ SETTINGS ============ */
-const CARD_ANIM_MS = 480;     // match CSS for cardDisplay
-const MODAL_ANIM_MS = 280;    // match CSS for ratingModal
+const CARD_ANIM_MS = 480;
+const MODAL_ANIM_MS = 280;
 
-/* =========================
-   CARDS
-   ========================= */
 const ORIGINAL_CARDS = [
   "Share a worry that hasn’t gotten smaller, felt better, or gone away no matter what you (or others) have tried.",
   "Describe a worry you used to have but don’t have anymore.",
@@ -333,9 +330,6 @@ const ratingDecks = {
   ]
 };
 
-/* =========================
-   GAME STATE
-   ========================= */
 let currentPlayer = 1;
 let scores = [0, 0];
 let drawPile = [];
@@ -345,10 +339,7 @@ let modalOpen = false;
 let modalType = null;
 let modalSelectedIndex = -1;
 
-/* Unlimited undo stack of snapshots */
 let undoStack = [];
-
-/* Prevent timers from “finishing” after undo */
 let pendingTurnTimer = null;
 
 function clearPendingTimers() {
@@ -358,9 +349,6 @@ function clearPendingTimers() {
   }
 }
 
-/* =========================
-   HELPERS
-   ========================= */
 function shuffleInPlace(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -374,9 +362,6 @@ function buildNewDeck() {
   shuffleInPlace(drawPile);
 }
 
-/* =========================
-   SNAPSHOTS (Unlimited Undo)
-   ========================= */
 function takeSnapshot() {
   const cardDisplay = document.getElementById("cardDisplay");
   const pileLabel = document.getElementById("pileLabel");
@@ -398,9 +383,7 @@ function takeSnapshot() {
   };
 }
 
-function pushUndo() {
-  undoStack.push(takeSnapshot());
-}
+function pushUndo() { undoStack.push(takeSnapshot()); }
 
 function restoreSnapshot(snap) {
   clearPendingTimers();
@@ -410,17 +393,14 @@ function restoreSnapshot(snap) {
   drawPile = [...snap.drawPile];
   lastDrawn = snap.lastDrawn;
 
-  // scores + active player
   document.getElementById("s1").textContent = String(scores[0]);
   document.getElementById("s2").textContent = String(scores[1]);
   document.getElementById("p1Box").classList.toggle("active", currentPlayer === 1);
   document.getElementById("p2Box").classList.toggle("active", currentPlayer === 2);
 
-  // pile label
   const pileLabel = document.getElementById("pileLabel");
   pileLabel.textContent = snap.pileLabelText;
 
-  // card
   const cardDisplay = document.getElementById("cardDisplay");
   if (snap.cardVisible) {
     cardDisplay.textContent = snap.cardText;
@@ -435,22 +415,18 @@ function restoreSnapshot(snap) {
     pileLabel.style.display = "flex";
   }
 
-  // modal
   modalOpen = snap.modalOpen;
   modalType = snap.modalType;
   modalSelectedIndex = snap.modalSelectedIndex;
 
   if (modalOpen && modalType) {
-    openRating(modalType, false); // re-render
+    openRating(modalType, false);
     setSelectedRating(modalSelectedIndex, false);
   } else {
-    closeRating(false, true); // force close without saving undo
+    closeRating(false, true);
   }
 }
 
-/* =========================
-   CARD SHOW/HIDE (Gentler)
-   ========================= */
 function showCardAnimated(text) {
   const cardDisplay = document.getElementById("cardDisplay");
   const pileLabel = document.getElementById("pileLabel");
@@ -483,9 +459,7 @@ function hideCardAnimated(immediate = false) {
   }, CARD_ANIM_MS);
 }
 
-/* =========================
-   START GAME
-   ========================= */
+/* START */
 document.getElementById("startBtn").onclick = () => {
   document.getElementById("p1Name").textContent = document.getElementById("name1").value || "Player 1";
   document.getElementById("p2Name").textContent = document.getElementById("name2").value || "Player 2";
@@ -497,9 +471,6 @@ document.getElementById("startBtn").onclick = () => {
   restartGame(false);
 };
 
-/* =========================
-   RESTART
-   ========================= */
 function restartGame(recordUndo = true) {
   clearPendingTimers();
   if (recordUndo) pushUndo();
@@ -517,7 +488,6 @@ function restartGame(recordUndo = true) {
   document.getElementById("pileLabel").textContent = "Draw";
   hideCardAnimated(true);
 
-  // close modal (no undo needed here because restart already snapshot)
   modalOpen = false;
   modalType = null;
   modalSelectedIndex = -1;
@@ -525,16 +495,12 @@ function restartGame(recordUndo = true) {
 }
 window.restartGame = restartGame;
 
-/* =========================
-   DRAW (No repeats)
-   ========================= */
 function drawCard() {
   clearPendingTimers();
 
   const cardDisplay = document.getElementById("cardDisplay");
   const pileLabel = document.getElementById("pileLabel");
 
-  // cannot draw when a card is already up
   if (cardDisplay.style.display === "flex") return;
 
   if (drawPile.length === 0) {
@@ -552,9 +518,6 @@ function drawCard() {
 }
 window.drawCard = drawCard;
 
-/* =========================
-   Award / Pass (gentle)
-   ========================= */
 function awardPoint() {
   clearPendingTimers();
   if (!lastDrawn) return;
@@ -578,7 +541,6 @@ function passTurn() {
 window.passTurn = passTurn;
 
 function endTurnGentle() {
-  // Fade card out first, THEN switch player (gentle)
   hideCardAnimated(false);
 
   pendingTurnTimer = setTimeout(() => {
@@ -594,9 +556,6 @@ function endTurnGentle() {
   }, CARD_ANIM_MS + 40);
 }
 
-/* =========================
-   UNDO (Unlimited)
-   ========================= */
 function undo() {
   if (undoStack.length === 0) return;
   const snap = undoStack.pop();
@@ -604,9 +563,6 @@ function undo() {
 }
 window.undo = undo;
 
-/* =========================
-   Rating Modal
-   ========================= */
 function setSelectedRating(index, recordUndo = true) {
   if (!modalOpen) return;
   if (recordUndo) pushUndo();
