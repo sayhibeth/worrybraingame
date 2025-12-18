@@ -3,221 +3,181 @@
 <head>
 <meta charset="UTF-8" />
 <title>Worry Brain Game</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet" />
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-  body {
-    font-family: "Poppins", sans-serif;
-    background: url("https://static.wixstatic.com/media/b668a8_eefb96f2f9cf49f18dccb579de6c263b~mv2.jpg") no-repeat center center fixed;
-    background-size: cover;
-    padding: 20px;
-    margin: 0;
-  }
+body {
+  font-family: "Poppins", sans-serif;
+  background: url("https://static.wixstatic.com/media/b668a8_eefb96f2f9cf49f18dccb579de6c263b~mv2.jpg") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 20px;
+}
 
-  /* START SCREEN */
-  #startScreen { text-align:center; margin-top:80px; color:white; }
-  .name-input {
-    padding:12px; font-size:18px; border-radius:12px;
-    border:none; margin:8px; width:240px;
-  }
-  #startBtn {
-    padding:20px 50px; font-size:26px; border-radius:20px;
-    font-weight:800; border:none; cursor:pointer;
-  }
+/* START SCREEN */
+#startScreen {
+  text-align: center;
+  margin-top: 80px;
+  color: white;
+}
 
-  /* GAME WRAPPER */
-  #gameWrapper { display:none; justify-content:center; margin-top:10px; }
+.name-input {
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: none;
+  margin: 8px;
+  width: 240px;
+}
 
-  /* SCOREBOARD */
-  .scoreboard { display:flex; gap:14px; justify-content:center; margin-bottom:18px; }
-  .player {
-    background: rgba(255,255,255,.92);
-    border-radius:14px; padding:8px 14px;
-    min-width:120px; text-align:center;
-    font-weight:800; border:3px solid transparent;
-  }
-  .player.active { border-color:black; transform:scale(1.08); }
-  .player-score { font-size:24px; }
+#startBtn {
+  padding: 20px 50px;
+  font-size: 26px;
+  border-radius: 20px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+}
 
-  /* LAYOUT */
-  #cardZone { display:flex; align-items:flex-start; gap:30px; }
+/* GAME WRAPPER */
+#gameWrapper {
+  display: none;
+  justify-content: center;
+  margin-top: 10px;
+}
 
-  /* MAIN DECK */
-  :root { --cardSize:360px; --cardRadius:36px; }
+/* SCOREBOARD */
+.scoreboard {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 18px;
+}
 
-  #cardPileContainer {
-    position:relative;
-    width:var(--cardSize);
-    height:var(--cardSize);
-    cursor:pointer;
-    z-index:5;
-    overflow: visible;
-  }
+.player {
+  background: rgba(255,255,255,.92);
+  border-radius: 14px;
+  padding: 8px 14px;
+  min-width: 120px;
+  text-align: center;
+  font-weight: 800;
+  border: 3px solid transparent;
+}
 
-  .pile-card {
-    position:absolute;
-    width:var(--cardSize);
-    height:var(--cardSize);
-    border-radius:var(--cardRadius);
-    background-image:url("https://static.wixstatic.com/media/b668a8_abdbe631fe6b46ef9345153bf9c75499~mv2.jpg");
-    background-size:cover;
-    box-shadow:0 6px 18px rgba(0,0,0,.45);
-  }
-  .pile-card:nth-child(1){top:0;left:0}
-  .pile-card:nth-child(2){top:10px;left:10px}
-  .pile-card:nth-child(3){top:20px;left:20px}
+.player.active {
+  border-color: black;
+  transform: scale(1.08);
+}
 
-  #pileLabel {
-    position:absolute; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    font-size:30px; font-weight:800; color:white;
-    text-shadow:0 2px 5px rgba(0,0,0,.8);
-    z-index:3;
-    pointer-events:none;
-  }
+.player-score {
+  font-size: 26px;
+}
 
-  /* ✅ BIGGER FONT + LESS LINE SPACING */
-  #cardDisplay {
-    position:absolute;
-    width: 500px;
-    height: 500px;
-    left: -100px;
-    top: -65px;
+/* MAIN LAYOUT */
+#cardZone {
+  display: flex;
+  justify-content: center;
+}
 
-    background: rgba(255,255,255,.97);
-    border-radius:36px;
-    padding:38px;
+/* MAIN DECK */
+:root {
+  --cardSize: 360px;
+  --cardRadius: 36px;
+}
 
-    display:none;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
+#cardPileContainer {
+  position: relative;
+  width: var(--cardSize);
+  height: var(--cardSize);
+  cursor: pointer;
+}
 
-    font-size:34px;     /* ✅ slightly bigger */
-    font-weight:600;
-    line-height:1.28;   /* ✅ much tighter */
+.pile-card {
+  position: absolute;
+  width: var(--cardSize);
+  height: var(--cardSize);
+  border-radius: var(--cardRadius);
+  background-image: url("https://static.wixstatic.com/media/b668a8_abdbe631fe6b46ef9345153bf9c75499~mv2.jpg");
+  background-size: cover;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45);
+}
 
-    overflow-y:auto;
-    z-index:10;
+.pile-card:nth-child(1) { top:0; left:0; }
+.pile-card:nth-child(2) { top:10px; left:10px; }
+.pile-card:nth-child(3) { top:20px; left:20px; }
 
-    opacity:0;
-    transform: translateY(24px) scale(0.98);
-    transition: opacity 480ms ease, transform 480ms ease;
-  }
-  #cardDisplay.show {
-    opacity:1;
-    transform: translateY(0) scale(1);
-  }
-  #cardDisplay.long { font-size:28px; line-height:1.28; } /* ✅ bigger + tight for long cards */
+#pileLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 2px 5px rgba(0,0,0,.8);
+  pointer-events: none;
+}
 
-  #cardDisplay.active-card {
-    border:2px solid rgba(0,0,0,0.16);
-    box-shadow:0 14px 30px rgba(0,0,0,0.26), 0 0 0 6px rgba(255,255,255,0.18);
-  }
+/* CARD DISPLAY */
+#cardDisplay {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  left: -100px;
+  top: -65px;
+  background: rgba(255,255,255,.97);
+  border-radius: 36px;
+  padding: 38px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.28;
+  overflow-y: auto;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition: opacity 480ms ease, transform 480ms ease;
+}
 
-  #cardDisplay::after {
-    content:"";
-    position:absolute;
-    bottom:0; left:0; right:0;
-    height:54px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.95));
-    pointer-events:none;
-  }
+#cardDisplay.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
 
-  /* BUTTONS */
-  #scoringButtons {
-    margin-top: 150px;
-    text-align:center;
-  }
-  .score-btn {
-    padding:14px 26px;
-    font-size:20px;
-    font-weight:800;
-    border-radius:16px;
-    border:none;
-    cursor:pointer;
-    margin:6px;
-  }
-  .award   { background:#00b894; color:white; }
-  .pass    { background:#fd9644; color:white; }
-  .undo    { background:#636e72; color:white; }
-  .restart { background:#0984e3; color:white; }
+#cardDisplay.long {
+  font-size: 28px;
+}
 
-  /* SIDE RATING DECKS */
-  #sideDecks { display:flex; flex-direction:column; gap:18px; position:relative; z-index:20; }
-  .sideDeck {
-    width:155px; height:155px;
-    border-radius:30px;
-    background-size:cover;
-    background-position:center;
-    box-shadow:0 6px 18px rgba(0,0,0,.45);
-    cursor:pointer;
-    position:relative;
-    z-index:50;
-  }
-  #bodyDeck   { background-image:url("https://static.wixstatic.com/media/b668a8_b2d8399e6374408994fb57a4757e0c01~mv2.png"); }
-  #sizeDeck   { background-image:url("https://static.wixstatic.com/media/b668a8_7fd6b941e7284d888fba7db795f7d2f6~mv2.png"); }
-  #impactDeck { background-image:url("https://static.wixstatic.com/media/b668a8_324a98ad43a34b6d9d07e476d19ff221~mv2.png"); }
+#cardDisplay.active-card {
+  border: 2px solid rgba(0,0,0,0.16);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.26);
+}
 
-  /* RATING MODAL */
-  #ratingModal {
-    position:fixed; inset:0;
-    background:rgba(0,0,0,.70);
-    display:none; align-items:center; justify-content:center;
-    z-index:999;
-    opacity:0;
-    transition: opacity 280ms ease;
-  }
-  #ratingModal.show { opacity:1; }
+/* BUTTONS */
+#scoringButtons {
+  margin-top: 150px;
+  text-align: center;
+}
 
-  #ratingBox {
-    background:white;
-    padding:42px;
-    border-radius:32px;
-    width:820px;
-    max-width:92vw;
-    text-align:center;
-    transform: translateY(10px);
-    transition: transform 280ms ease;
-  }
-  #ratingModal.show #ratingBox { transform: translateY(0); }
+.score-btn {
+  padding: 14px 26px;
+  font-size: 20px;
+  font-weight: 800;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  margin: 6px;
+}
 
-  #ratingCards {
-    display:flex;
-    gap:30px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin:30px 0;
-  }
-  .ratingCard {
-    width:240px; height:240px;
-    border-radius:32px;
-    border:4px solid transparent;
-    cursor:pointer;
-    box-shadow:0 10px 28px rgba(0,0,0,.35);
-    overflow:hidden;
-    transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
-    background: rgba(255,255,255,0.5);
-  }
-  .ratingCard.selected {
-    transform:scale(1.18);
-    border-color:#00b894;
-    box-shadow:0 14px 40px rgba(0,0,0,.6);
-  }
-  .ratingCard img { width:100%; height:100%; object-fit:contain; }
-
-  @media (max-width: 980px) {
-    #cardDisplay {
-      width: 430px;
-      height: 430px;
-      left: -75px;
-      top: -45px;
-      font-size:30px;
-      line-height:1.28;
-    }
-    #cardDisplay.long { font-size:25px; line-height:1.28; }
-    #scoringButtons { margin-top: 130px; }
-  }
+.award { background:#00b894; color:white; }
+.pass { background:#fd9644; color:white; }
+.undo { background:#636e72; color:white; }
+.restart { background:#0984e3; color:white; }
 </style>
 </head>
 
@@ -233,8 +193,14 @@
 <div id="gameWrapper">
   <div>
     <div class="scoreboard">
-      <div class="player active" id="p1Box"><span id="p1Name">Player 1</span><br><span class="player-score" id="s1">0</span></div>
-      <div class="player" id="p2Box"><span id="p2Name">Player 2</span><br><span class="player-score" id="s2">0</span></div>
+      <div class="player active" id="p1Box">
+        <span id="p1Name">Player 1</span><br>
+        <span class="player-score" id="s1">0</span>
+      </div>
+      <div class="player" id="p2Box">
+        <span id="p2Name">Player 2</span><br>
+        <span class="player-score" id="s2">0</span>
+      </div>
     </div>
 
     <div id="cardZone">
@@ -243,7 +209,6 @@
           <div class="pile-card"></div>
           <div class="pile-card"></div>
           <div class="pile-card"></div>
-
           <div id="cardDisplay"></div>
           <div id="pileLabel">Draw</div>
         </div>
@@ -255,29 +220,14 @@
           <button class="score-btn restart" onclick="restartGame(true)">RESTART</button>
         </div>
       </div>
-
-      <div id="sideDecks">
-        <div class="sideDeck" id="bodyDeck" onclick="openRating('body', true)"></div>
-        <div class="sideDeck" id="sizeDeck" onclick="openRating('size', true)"></div>
-        <div class="sideDeck" id="impactDeck" onclick="openRating('impact', true)"></div>
-      </div>
     </div>
-  </div>
-</div>
-
-<div id="ratingModal">
-  <div id="ratingBox">
-    <h2 id="ratingTitle"></h2>
-    <div id="ratingCards"></div>
-    <button class="score-btn pass" onclick="closeRating(true)">OK</button>
   </div>
 </div>
 
 <script>
 const CARD_ANIM_MS = 480;
-const MODAL_ANIM_MS = 280;
 
-const ORIGINAL_CARDS = [
+const CARDS = [
   "Share a worry that hasn’t gotten smaller, felt better, or gone away no matter what you (or others) have tried.",
   "Describe a worry you used to have but don’t have anymore.",
   "Name a worry that shows up at night when you’re trying to fall asleep.",
@@ -287,341 +237,144 @@ const ORIGINAL_CARDS = [
   "Describe how your body feels when you start to feel worried or anxious.",
   "Name someone you trust enough to share your worries with.",
   "Tell about a worry that turned out to be smaller than you expected.",
-  "Describe a place (or person) that makes you feel calm and safe. What makes that place (or person) so special?",
+  "Describe a place or person that makes you feel calm and safe. What makes it special?",
   "Name a worry you sometimes have about your family.",
   "Name a worry you sometimes have about your friends.",
   "Name a worry you sometimes have about school.",
   "Name a worry you sometimes have about yourself.",
-  "PRACTICE — Taking slow, deep breaths (when done correctly!) can help interrupt the worry feeling in our bodies. Breathe in slowly for a count of 4, then breathe out deeply for a count of 5. Repeat this 4 times, then share how your body feels afterward.",
-  "PRACTICE — Shake out your nervous energy — run in place while wiggling your arms and hands for 8 seconds! Then collapse dramatically back into your seat and tell the group how your body feels.",
-  "PRACTICE — Try a “5-4-3-2-1” grounding check: notice 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste.",
-  "PRACTICE — Choose one: Gently stretch your whole body like a cat and hold it for 5 seconds, or tense and relax your muscles like the Hulk three times. Then share how your body feels afterward.",
-  "PRACTICE — Calming self-talk means saying kind words to yourself, like “I can handle this,” “This feeling will pass,” or “I am safe right now.” Using a puppet or your hand, say two kind things you can tell yourself the next time you feel worried.",
-  "DRAW IT OUT — Draw a picture of a calm, safe place (real or made-up). Close your eyes and imagine being there, noticing what you see, hear, or feel as you hold the image in your mind for 10 seconds.",
-  "DRAW IT OUT — Draw what anxiety feels like in your body, including where you feel it and what it feels like (tight, hot, buzzy, heavy, etc.).",
-  "DRAW IT OUT — Make a comic strip that shows what happens before, during, and after a worry shows up.",
-  "ACT IT OUT — Pretend you’re holding a TV remote. Imagine a worry playing in your mind (that’s your “worry channel”). Press the remote to switch to a new channel that shows something calming or funny. Say the new channel out loud and give it a name.",
-  "ACT IT OUT — Pretend your friend’s “worry brain” is getting loud. Act out what you might say or do to help them feel calmer.",
-  "ACT IT OUT — Pretend you are a therapist. Give someone advice on what to do when worries show up, like using belly breaths, squeezing a stress ball, talking to a trusted person, or doing something relaxing.",
-  "ACT IT OUT — Share a worry about something you can’t control (or have no power over). Then act out pulling the worry out of your mind, placing it in a special box, wrapping it up, and putting it on a shelf to look at another time.",
-  "Describe a time when your worry brain got in the way of feeling safe, having fun, or doing something you wanted to do.",
-  "WRITE IT OUT — Write down a worry you don’t like to talk about (or draw a picture of it).",
-  "DRAW IT OUT — Draw two of your biggest worries (or two you have often). Then scribble on them, make them silly, or add things that help the worries feel less powerful."
+  "PRACTICE — Take slow breaths. Inhale for 4, exhale for 5. Repeat 4 times and notice how your body feels.",
+  "PRACTICE — Shake out nervous energy for 8 seconds, then relax and notice how your body feels.",
+  "PRACTICE — Use the 5-4-3-2-1 grounding exercise.",
+  "PRACTICE — Stretch like a cat or tense and relax like the Hulk. Notice how your body feels.",
+  "PRACTICE — Say two kind things to yourself when you feel worried.",
+  "DRAW IT OUT — Draw a calm, safe place and imagine being there for 10 seconds.",
+  "DRAW IT OUT — Draw what anxiety feels like in your body.",
+  "DRAW IT OUT — Make a comic showing before, during, and after a worry.",
+  "ACT IT OUT — Change the worry channel to something calming or funny.",
+  "ACT IT OUT — Help a friend whose worry brain is loud.",
+  "ACT IT OUT — Give advice on managing worries.",
+  "ACT IT OUT — Put a worry you can’t control into a box and set it aside.",
+  "Describe a time worry got in the way of feeling safe or having fun.",
+  "WRITE IT OUT — Write or draw a worry you don’t like to talk about.",
+  "DRAW IT OUT — Draw two big worries and make them less powerful."
 ];
 
-const ratingDecks = {
-  body: [
-    "https://static.wixstatic.com/media/b668a8_2be9b3cfd4504eaca7a5517548dde99b~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_be53ed20dc5b4027862274fc55faeac3~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_909b3c65312640ea8be03e66748a5902~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_5141026cc3574c6882becf2baea8507c~mv2.png"
-  ],
-  size: [
-    "https://static.wixstatic.com/media/b668a8_b8eb8e90272a4c1fbda6ae0d012d19d8~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_87f175cb2e65474b98814618fba4ad6e~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_c663d2b9fa2e44d5888216dc322d1fd8~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_5ea58a0c5f4e4614b77e14f5475c3cf1~mv2.png"
-  ],
-  impact: [
-    "https://static.wixstatic.com/media/b668a8_eba955bb29c64dceaef8856367f9e5ae~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_3fe5d4c621aa479b86309166eec2c2a2~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_7d9b77dcc6c6438c972758b99f877ddd~mv2.png",
-    "https://static.wixstatic.com/media/b668a8_88aae36108584f729fa398397a6bfbef~mv2.png"
-  ]
-};
-
-let currentPlayer = 1;
-let scores = [0, 0];
 let drawPile = [];
-let lastDrawn = null;
-
-let modalOpen = false;
-let modalType = null;
-let modalSelectedIndex = -1;
-
 let undoStack = [];
-let pendingTurnTimer = null;
+let currentPlayer = 1;
+let scores = [0,0];
+let lastCard = null;
 
-function clearPendingTimers() {
-  if (pendingTurnTimer) {
-    clearTimeout(pendingTurnTimer);
-    pendingTurnTimer = null;
-  }
-}
-
-function shuffleInPlace(arr) {
+function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return arr;
 }
 
-function buildNewDeck() {
-  drawPile = [...ORIGINAL_CARDS];
-  shuffleInPlace(drawPile);
-}
-
-function takeSnapshot() {
-  const cardDisplay = document.getElementById("cardDisplay");
-  const pileLabel = document.getElementById("pileLabel");
-
+function snapshot() {
   return {
+    drawPile:[...drawPile],
+    scores:[...scores],
     currentPlayer,
-    scores: [...scores],
-    drawPile: [...drawPile],
-    lastDrawn,
-    pileLabelText: pileLabel.textContent,
-
+    lastCard,
     cardVisible: cardDisplay.style.display === "flex",
-    cardText: cardDisplay.textContent || "",
-    cardLong: cardDisplay.classList.contains("long"),
-
-    modalOpen,
-    modalType,
-    modalSelectedIndex
+    cardText: cardDisplay.textContent
   };
 }
 
-function pushUndo() { undoStack.push(takeSnapshot()); }
-
-function restoreSnapshot(snap) {
-  clearPendingTimers();
-
-  currentPlayer = snap.currentPlayer;
-  scores = [...snap.scores];
-  drawPile = [...snap.drawPile];
-  lastDrawn = snap.lastDrawn;
-
-  document.getElementById("s1").textContent = String(scores[0]);
-  document.getElementById("s2").textContent = String(scores[1]);
-  document.getElementById("p1Box").classList.toggle("active", currentPlayer === 1);
-  document.getElementById("p2Box").classList.toggle("active", currentPlayer === 2);
-
-  const pileLabel = document.getElementById("pileLabel");
-  pileLabel.textContent = snap.pileLabelText;
-
-  const cardDisplay = document.getElementById("cardDisplay");
-  if (snap.cardVisible) {
-    cardDisplay.textContent = snap.cardText;
-    cardDisplay.classList.toggle("long", !!snap.cardLong);
-    cardDisplay.style.display = "flex";
-    cardDisplay.classList.add("active-card");
-    pileLabel.style.display = "none";
-    requestAnimationFrame(() => cardDisplay.classList.add("show"));
+function restore(s) {
+  drawPile=[...s.drawPile];
+  scores=[...s.scores];
+  currentPlayer=s.currentPlayer;
+  lastCard=s.lastCard;
+  s1.textContent=scores[0];
+  s2.textContent=scores[1];
+  p1Box.classList.toggle("active",currentPlayer===1);
+  p2Box.classList.toggle("active",currentPlayer===2);
+  if(s.cardVisible){
+    showCard(s.cardText);
   } else {
-    cardDisplay.classList.remove("show", "active-card", "long");
-    cardDisplay.style.display = "none";
-    pileLabel.style.display = "flex";
+    hideCard(true);
   }
+}
 
-  modalOpen = snap.modalOpen;
-  modalType = snap.modalType;
-  modalSelectedIndex = snap.modalSelectedIndex;
+function drawCard(){
+  if(cardDisplay.style.display==="flex") return;
+  if(drawPile.length===0){ pileLabel.textContent="No Cards"; return; }
+  undoStack.push(snapshot());
+  lastCard=drawPile.pop();
+  showCard(lastCard);
+}
 
-  if (modalOpen && modalType) {
-    openRating(modalType, false);
-    setSelectedRating(modalSelectedIndex, false);
+function showCard(text){
+  cardDisplay.textContent=text;
+  cardDisplay.classList.toggle("long", text.length>220);
+  cardDisplay.style.display="flex";
+  pileLabel.style.display="none";
+  requestAnimationFrame(()=>cardDisplay.classList.add("show","active-card"));
+}
+
+function hideCard(immediate=false){
+  cardDisplay.classList.remove("show","active-card");
+  if(immediate){
+    cardDisplay.style.display="none";
+    pileLabel.style.display="flex";
   } else {
-    closeRating(false, true);
+    setTimeout(()=>{cardDisplay.style.display="none"; pileLabel.style.display="flex";},CARD_ANIM_MS);
   }
 }
 
-function showCardAnimated(text) {
-  const cardDisplay = document.getElementById("cardDisplay");
-  const pileLabel = document.getElementById("pileLabel");
-
-  cardDisplay.textContent = text;
-  cardDisplay.classList.toggle("long", text.length > 220);
-
-  cardDisplay.style.display = "flex";
-  cardDisplay.classList.add("active-card");
-  pileLabel.style.display = "none";
-
-  requestAnimationFrame(() => cardDisplay.classList.add("show"));
+function awardPoint(){
+  if(!lastCard) return;
+  undoStack.push(snapshot());
+  scores[currentPlayer-1]++;
+  document.getElementById("s"+currentPlayer).textContent=scores[currentPlayer-1];
+  endTurn();
 }
 
-function hideCardAnimated(immediate = false) {
-  const cardDisplay = document.getElementById("cardDisplay");
-  const pileLabel = document.getElementById("pileLabel");
-
-  if (immediate) {
-    cardDisplay.classList.remove("show", "active-card", "long");
-    cardDisplay.style.display = "none";
-    pileLabel.style.display = "flex";
-    return;
-  }
-
-  cardDisplay.classList.remove("show", "active-card");
-  setTimeout(() => {
-    cardDisplay.style.display = "none";
-    pileLabel.style.display = "flex";
-  }, CARD_ANIM_MS);
+function passTurn(){
+  if(!lastCard) return;
+  undoStack.push(snapshot());
+  endTurn();
 }
 
-/* START */
-document.getElementById("startBtn").onclick = () => {
-  document.getElementById("p1Name").textContent = document.getElementById("name1").value || "Player 1";
-  document.getElementById("p2Name").textContent = document.getElementById("name2").value || "Player 2";
+function endTurn(){
+  hideCard();
+  setTimeout(()=>{
+    lastCard=null;
+    currentPlayer=currentPlayer===1?2:1;
+    p1Box.classList.toggle("active",currentPlayer===1);
+    p2Box.classList.toggle("active",currentPlayer===2);
+    pileLabel.textContent=drawPile.length?"Draw":"No Cards";
+  },CARD_ANIM_MS+40);
+}
 
-  document.getElementById("startScreen").style.display = "none";
-  document.getElementById("gameWrapper").style.display = "flex";
+function undo(){
+  if(!undoStack.length) return;
+  restore(undoStack.pop());
+}
 
-  undoStack = [];
-  restartGame(false);
+function restartGame(){
+  drawPile=[...CARDS];
+  shuffle(drawPile);
+  scores=[0,0];
+  s1.textContent=0; s2.textContent=0;
+  currentPlayer=1;
+  p1Box.classList.add("active"); p2Box.classList.remove("active");
+  lastCard=null;
+  hideCard(true);
+  pileLabel.textContent="Draw";
+  undoStack=[];
+}
+
+startBtn.onclick=()=>{
+  p1Name.textContent=name1.value||"Player 1";
+  p2Name.textContent=name2.value||"Player 2";
+  startScreen.style.display="none";
+  gameWrapper.style.display="flex";
+  restartGame();
 };
-
-function restartGame(recordUndo = true) {
-  clearPendingTimers();
-  if (recordUndo) pushUndo();
-
-  currentPlayer = 1;
-  scores = [0, 0];
-  document.getElementById("s1").textContent = "0";
-  document.getElementById("s2").textContent = "0";
-  document.getElementById("p1Box").classList.add("active");
-  document.getElementById("p2Box").classList.remove("active");
-
-  lastDrawn = null;
-
-  buildNewDeck();
-  document.getElementById("pileLabel").textContent = "Draw";
-  hideCardAnimated(true);
-
-  modalOpen = false;
-  modalType = null;
-  modalSelectedIndex = -1;
-  closeRating(false, true);
-}
-window.restartGame = restartGame;
-
-function drawCard() {
-  clearPendingTimers();
-
-  const cardDisplay = document.getElementById("cardDisplay");
-  const pileLabel = document.getElementById("pileLabel");
-
-  if (cardDisplay.style.display === "flex") return;
-
-  if (drawPile.length === 0) {
-    pileLabel.textContent = "No Cards";
-    return;
-  }
-
-  pushUndo();
-
-  const card = drawPile.pop();
-  lastDrawn = card;
-  showCardAnimated(card);
-
-  pileLabel.textContent = (drawPile.length === 0) ? "No Cards" : "Draw";
-}
-window.drawCard = drawCard;
-
-function awardPoint() {
-  clearPendingTimers();
-  if (!lastDrawn) return;
-
-  pushUndo();
-
-  scores[currentPlayer - 1]++;
-  document.getElementById("s" + currentPlayer).textContent = String(scores[currentPlayer - 1]);
-
-  endTurnGentle();
-}
-window.awardPoint = awardPoint;
-
-function passTurn() {
-  clearPendingTimers();
-  if (!lastDrawn) return;
-
-  pushUndo();
-  endTurnGentle();
-}
-window.passTurn = passTurn;
-
-function endTurnGentle() {
-  hideCardAnimated(false);
-
-  pendingTurnTimer = setTimeout(() => {
-    lastDrawn = null;
-
-    document.getElementById("p1Box").classList.remove("active");
-    document.getElementById("p2Box").classList.remove("active");
-    currentPlayer = (currentPlayer === 1) ? 2 : 1;
-    document.getElementById("p" + currentPlayer + "Box").classList.add("active");
-
-    document.getElementById("pileLabel").textContent = (drawPile.length === 0) ? "No Cards" : "Draw";
-    pendingTurnTimer = null;
-  }, CARD_ANIM_MS + 40);
-}
-
-function undo() {
-  if (undoStack.length === 0) return;
-  const snap = undoStack.pop();
-  restoreSnapshot(snap);
-}
-window.undo = undo;
-
-function setSelectedRating(index, recordUndo = true) {
-  if (!modalOpen) return;
-  if (recordUndo) pushUndo();
-
-  modalSelectedIndex = index;
-  document.querySelectorAll(".ratingCard").forEach((c, i) => {
-    c.classList.toggle("selected", i === index);
-  });
-}
-
-function openRating(type, recordUndo = true) {
-  clearPendingTimers();
-  if (recordUndo) pushUndo();
-
-  modalOpen = true;
-  modalType = type;
-  modalSelectedIndex = -1;
-
-  document.getElementById("ratingTitle").textContent = type.toUpperCase() + " RATING";
-  const ratingCardsEl = document.getElementById("ratingCards");
-  ratingCardsEl.innerHTML = "";
-
-  ratingDecks[type].forEach((src, idx) => {
-    const div = document.createElement("div");
-    div.className = "ratingCard";
-    div.onclick = () => setSelectedRating(idx, true);
-
-    const img = document.createElement("img");
-    img.src = src;
-    div.appendChild(img);
-    ratingCardsEl.appendChild(div);
-  });
-
-  const modal = document.getElementById("ratingModal");
-  modal.style.display = "flex";
-  requestAnimationFrame(() => modal.classList.add("show"));
-}
-window.openRating = openRating;
-
-function closeRating(recordUndo = true, forceImmediate = false) {
-  if (!forceImmediate && recordUndo) pushUndo();
-
-  modalOpen = false;
-  modalType = null;
-  modalSelectedIndex = -1;
-
-  const modal = document.getElementById("ratingModal");
-  modal.classList.remove("show");
-
-  if (forceImmediate) {
-    modal.style.display = "none";
-    return;
-  }
-
-  setTimeout(() => {
-    modal.style.display = "none";
-  }, MODAL_ANIM_MS + 20);
-}
-window.closeRating = closeRating;
 </script>
 
 </body>
